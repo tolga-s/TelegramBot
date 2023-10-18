@@ -11,7 +11,7 @@ public class Menu {
                                     
                     Ready for some fun? 🤖
                                     
-                    If you're ready to dive into the game menu, simply type /game.
+                    If you're ready to dive into the game, simply type /game.
                     
                     Need help? Just type /help.
                     """;
@@ -23,7 +23,7 @@ public class Menu {
             String help = """
                     Here is a list of all the commands you can use:
                                         
-                    🚀 /start: Goes back to the introduction
+                    🚀 /start: Gives a short introduction
                     🎮 /game: Takes you to the game menu
                     🆘 /help: Takes you back to this list
                     """;
@@ -39,7 +39,6 @@ public class Menu {
                     """;
             return game;
         }
-
         return "XX";
     }
 
