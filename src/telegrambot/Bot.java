@@ -11,14 +11,13 @@ import java.util.Map;
 
 public class Bot extends TelegramLongPollingBot {
 
-    private boolean firstEntry = true;
-    Menu menu = new Menu();
     Map<Long, Game> userGames = new HashMap<>();
+    Menu menu = new Menu();
+    private boolean firstEntry = true;
 
     @Override
     public void onUpdateReceived(Update update) {
         long chatId = update.getMessage().getChatId();
-        long userId = update.getMessage().getFrom().getId();
         String userName = update.getMessage().getFrom().getFirstName();
         String message = update.getMessage().getText();
         System.out.println(message);
@@ -35,7 +34,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         else if (game.isOn()) {
             sendResponse(chatId, game.playGame(message));
-            game.setPlayGame(game.state());
+            game.setState(game.state());
 
             if (!game.isOn()) {
                 sendResponse(chatId, game.end(userName));
@@ -49,7 +48,7 @@ public class Bot extends TelegramLongPollingBot {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            game.setPlayGame(true);
+            game.setState(true);
         }
         else {
             sendResponse(chatId, menu.menu(message, userName));

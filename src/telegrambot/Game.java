@@ -20,7 +20,7 @@ public class Game {
         return playGame;
     }
 
-    public void setPlayGame(boolean playGame) {
+    public void setState(boolean playGame) {
         this.playGame = playGame;
     }
 
@@ -36,7 +36,14 @@ public class Game {
     }
 
     public String playGame(String answer) {
-        correctLetters(answer);
+        String regex = "^[a-zA-Z]$";
+
+        if (answer.matches(regex)) {
+            correctLetters(answer);
+        }
+        else {
+            return "🤯 Oh sorry, that didn't work - please type in a <b>letter</b> 😇";
+        }
         state();
 
         return printField();
@@ -80,7 +87,7 @@ public class Game {
                 sb.append("_ ");
             }
         }
-        return sb.toString();
+        return "<b>" + sb.toString() + "</b>";
     }
 
     public boolean state() {
@@ -96,14 +103,14 @@ public class Game {
     public String end(String userName) {
 
         if (userGuesses.containsAll(correctAnswers)) {
-            String won = "Very well done, " + userName + "! 🥳\n\n" +
-                    "You should play another game 🎉 Click /playagain";
+            String won = "<b>Very well done, " + userName + "! 🥳\n\n" +
+                    "You should play another game 🎉 Click /playagain</b>";
             return won;
         } else {
-            String lost = "Oh no, that's a pity! 😭" +
+            String lost = "<b>Oh no, that's a pity! 😭" +
                     " The word was " + secretWord.toUpperCase() + ".\n\n" +
                     "Don't worry, better luck awaits next time! \uD83C\uDF40\n\n" +
-                    "Ready for another round? 🎯 Just klick on /playagain";                    ;
+                    "Ready for another round? 🎯 Just klick on /playagain</b>";
             return lost;
         }
     }
@@ -116,19 +123,14 @@ public class Game {
 
     public String drawAscii() {
         StringBuilder sb2 = new StringBuilder();
-        StringBuilder sb3 = new StringBuilder();
-        for (Character c : userGuesses) {
-            sb3.append(c);
-            sb3.append(" ");
-        }
-        sb3.trimToSize();
+        StringBuilder sb3 = cornerIncorrectGuesses();
 
         int incorrectGuesses = counter; //
 
         // Append different parts of the Hangman figure based on the number of incorrect guesses
         switch (incorrectGuesses) {
             case 0:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: 0 🤩 \n");
                 sb2.append("|       \n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -138,7 +140,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 1:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🙂\n");
                 sb2.append("|       |\n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -148,7 +150,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 2:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "😶\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      \n");
@@ -158,7 +160,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 3:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🤔\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|       |\n");
@@ -168,7 +170,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 4:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🤐\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      /|\n");
@@ -178,7 +180,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 5:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🫣\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      /|\\\n");
@@ -186,9 +188,9 @@ public class Game {
                 sb2.append("|      \n");
                 sb2.append("=========\n");
                 sb2.append("\n");
-                    break;
+                break;
             case 6:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🥵\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      /|\\\n");
@@ -198,12 +200,12 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 7:
-                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🤯\n");
                 sb2.append("|       |\n");
-                sb2.append("|      💀\n");
-                sb2.append("|      /|\\\n");
-                sb2.append("|      /  \\\n");
-                sb2.append("|      \n");
+                sb2.append("|     💀\n");
+                sb2.append("|     /|\\\n");
+                sb2.append("|     /  \\\n");
+                sb2.append("|     \n");
                 sb2.append("=========\n");
                 sb2.append("\n");
                 break;
@@ -212,5 +214,17 @@ public class Game {
                 break;
         }
         return sb2.toString();
+    }
+
+    public StringBuilder cornerIncorrectGuesses() {
+        StringBuilder sb3 = new StringBuilder();
+        for (Character c : userGuesses) {
+            if (!correctAnswers.contains(c)) {
+                sb3.append(c);
+                sb3.append(" ");
+            }
+        }
+        sb3.trimToSize();
+        return sb3;
     }
 }
