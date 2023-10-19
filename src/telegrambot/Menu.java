@@ -2,12 +2,13 @@ package telegrambot;
 
 public class Menu {
 
-    public String menu(String message) {
+    public String menu(String message, String userName) {
+        boolean startPlay = false;
 
-        // Welcome Text
-        if (message.toLowerCase().startsWith("/start") || message.toLowerCase().startsWith("start")) {
-            String hello = """
-                    👋 Welcome human! 🎉
+        // Hello after Welcome
+        if (message.equalsIgnoreCase("/start") || message.equalsIgnoreCase("start")) {
+            String hello = "👋 Hello " + userName + "!  🎉\n" +
+                    """
                                     
                     Ready for some fun? 🤖
                                     
@@ -19,7 +20,7 @@ public class Menu {
         }
 
         // Help menu
-        if (message.toLowerCase().startsWith("help") || message.toLowerCase().startsWith("/help")) {
+        if (message.equalsIgnoreCase("help") || message.equalsIgnoreCase("/help")) {
             String help = """
                     Here is a list of all the commands you can use:
                                         
@@ -30,7 +31,7 @@ public class Menu {
             return help;
         }
 
-        if (message.toLowerCase().startsWith("game") || message.toLowerCase().startsWith("/game")) {
+        if (message.equalsIgnoreCase("game") || message.equalsIgnoreCase("/game")) {
             String game = """
                     Great! Let's see what I can do for you:
                     
@@ -39,13 +40,12 @@ public class Menu {
                     """;
             return game;
         }
-        return "XX";
+        return null;
     }
 
-    public String firstWelcome(String message) {
-        String firstWelcome = """
-                Welcome to HangmanBot!
-                                
+    public String firstWelcome(String userName) {
+        String firstWelcome = "Welcome to HangmanBot, " + userName + "!\n\n" +
+                """
                 🎉 Are you ready to embark on a thrilling word-guessing journey with me? Allow me to introduce myself - I'm HangmanBot, your trusty companion for all word games!
                                 
                 🤖 Despite my unique name, I promise to make your experience engaging and fun. Get ready to put your vocabulary skills to the test as you dive into the world of Hangman.

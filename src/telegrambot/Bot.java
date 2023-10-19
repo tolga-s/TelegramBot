@@ -5,23 +5,49 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class Bot extends TelegramLongPollingBot {
 
-    private boolean firstWelcome = true;
+    private boolean firstEntry = true;
     Menu menu = new Menu();
+    Map<Long, Game> userGames = new HashMap<>();
 
     @Override
     public void onUpdateReceived(Update update) {
         long chatId = update.getMessage().getChatId();
+        long userId = update.getMessage().getFrom().getId();
+        String userName = update.getMessage().getFrom().getFirstName();
         String message = update.getMessage().getText();
         System.out.println(message);
 
-        if (firstWelcome) {
-            sendResponse(chatId, menu.firstWelcome(message));
-            firstWelcome = false;
-        } else {
-            sendResponse(chatId, menu.menu(message));
+        Game game = userGames.get(chatId);
+        if (game == null) {
+            game = new Game();
+            userGames.put(chatId, game);
+        }
+
+        if (firstEntry) {
+            sendResponse(chatId, menu.firstWelcome(userName));
+            firstEntry = false;
+        }
+        else if (game.isOn()) {
+            sendResponse(chatId, game.playGame(message));
+            game.setPlayGame(game.state());
+
+            if (!game.isOn()) {
+                sendResponse(chatId, game.end(userName));
+                game.clearField();
+            }
+        }
+        else if (message.equalsIgnoreCase("play") || message.equalsIgnoreCase("/play") || message.equalsIgnoreCase("/playagain")) {
+            sendResponse(chatId, "Alright, let's play then! 🎇");
+            sendResponse(chatId, game.setGame());
+            game.setPlayGame(true);
+        }
+        else {
+            sendResponse(chatId, menu.menu(message, userName));
         }
     }
 
