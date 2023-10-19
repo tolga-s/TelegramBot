@@ -1,15 +1,18 @@
 package telegrambot;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Game {
 
     public List<String> wordlist = new ArrayList<>();
     public List<Character> correctAnswers = new ArrayList<>();
     public List<Character> userGuesses = new ArrayList<>();
+    public String secretWord;
     public int counter;
     private boolean playGame;
 
@@ -21,14 +24,11 @@ public class Game {
         this.playGame = playGame;
     }
 
-    private void words() {
-        wordlist = Arrays.asList(
-                "Excited", "Elephant", "Rainbow", "Sunshine", "Computer",
-                "Butterfly", "Adventure", "Delicious", "Mountain", "Universe"
-        );
+    private void words() throws IOException {
+        wordlist = Files.readAllLines(Paths.get("dictionary.txt"));
     }
 
-    public String setGame() {
+    public String setGame() throws IOException {
         words();
         wordToCharList(chooseRandomWord());
 
@@ -43,10 +43,10 @@ public class Game {
     }
 
     public String chooseRandomWord() {
-        Random random = new Random();
-        int randomIndex = random.nextInt(wordlist.size());
+        int randomIndex = ThreadLocalRandom.current().nextInt(wordlist.size());
 
         String randomWord = wordlist.get(randomIndex).toUpperCase();
+        this.secretWord = randomWord;
 
         return randomWord;
     }
@@ -101,7 +101,7 @@ public class Game {
             return won;
         } else {
             String lost = "Oh no, that's a pity! 😭" +
-                    " The word was " + chooseRandomWord().toUpperCase() + ".\n\n" +
+                    " The word was " + secretWord.toUpperCase() + ".\n\n" +
                     "Don't worry, better luck awaits next time! \uD83C\uDF40\n\n" +
                     "Ready for another round? 🎯 Just klick on /playagain";                    ;
             return lost;
@@ -116,13 +116,19 @@ public class Game {
 
     public String drawAscii() {
         StringBuilder sb2 = new StringBuilder();
+        StringBuilder sb3 = new StringBuilder();
+        for (Character c : userGuesses) {
+            sb3.append(c);
+            sb3.append(" ");
+        }
+        sb3.trimToSize();
 
         int incorrectGuesses = counter; //
 
         // Append different parts of the Hangman figure based on the number of incorrect guesses
         switch (incorrectGuesses) {
             case 0:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       \n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -132,7 +138,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 1:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       |\n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -142,7 +148,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 2:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      \n");
@@ -152,7 +158,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 3:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|       |\n");
@@ -162,7 +168,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 4:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      /|\n");
@@ -172,7 +178,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 5:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      /|\\\n");
@@ -182,7 +188,7 @@ public class Game {
                 sb2.append("\n");
                     break;
             case 6:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       |\n");
                 sb2.append("|       O\n");
                 sb2.append("|      /|\\\n");
@@ -192,7 +198,7 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 7:
-                sb2.append("  +-----+\n");
+                sb2.append("  +-----+          Guessed letters: " + sb3 + "\n");
                 sb2.append("|       |\n");
                 sb2.append("|      💀\n");
                 sb2.append("|      /|\\\n");

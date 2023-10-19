@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +44,11 @@ public class Bot extends TelegramLongPollingBot {
         }
         else if (message.equalsIgnoreCase("play") || message.equalsIgnoreCase("/play") || message.equalsIgnoreCase("/playagain")) {
             sendResponse(chatId, "Alright, let's play then! 🎇");
-            sendResponse(chatId, game.setGame());
+            try {
+                sendResponse(chatId, game.setGame());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             game.setPlayGame(true);
         }
         else {
@@ -55,6 +60,7 @@ public class Bot extends TelegramLongPollingBot {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.setText(s);
+        msg.setParseMode("HTML");
 
         try {
             execute(msg);
