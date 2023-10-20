@@ -18,3 +18,5 @@ Pepper
 Market
 Wallet
 Orange
+Snowflake
+Flower

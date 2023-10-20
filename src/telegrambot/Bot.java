@@ -2,6 +2,8 @@ package telegrambot;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -38,6 +40,7 @@ public class Bot extends TelegramLongPollingBot {
 
             if (!game.isOn()) {
                 sendResponse(chatId, game.end(userName));
+                sendPhoto(chatId, game.pictureDescr(), game.picture());
                 game.clearField();
             }
         }
@@ -63,6 +66,19 @@ public class Bot extends TelegramLongPollingBot {
 
         try {
             execute(msg);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendPhoto(Long chatId, String photoCaption, String photoFilePath) {
+        SendPhoto sendPhoto = new SendPhoto();
+        sendPhoto.setChatId(chatId);
+        sendPhoto.setCaption(photoCaption);
+        sendPhoto.setPhoto(new InputFile(photoFilePath));
+
+        try {
+            execute(sendPhoto);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

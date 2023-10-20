@@ -15,6 +15,7 @@ public class Game {
     public String secretWord;
     public int counter;
     private boolean playGame;
+    public boolean won;
 
     public boolean isOn() {
         return playGame;
@@ -105,12 +106,15 @@ public class Game {
         if (userGuesses.containsAll(correctAnswers)) {
             String won = "<b>Very well done, " + userName + "! 🥳\n\n" +
                     "You should play another game 🎉 Click /playagain</b>";
+            this.won = true;
             return won;
-        } else {
+        }
+        else {
             String lost = "<b>Oh no, that's a pity! 😭" +
                     " The word was " + secretWord.toUpperCase() + ".\n\n" +
                     "Don't worry, better luck awaits next time! \uD83C\uDF40\n\n" +
                     "Ready for another round? 🎯 Just klick on /playagain</b>";
+            picture();
             return lost;
         }
     }
@@ -152,7 +156,7 @@ public class Game {
             case 2:
                 sb2.append("  +-----+          Incorrect guesses: " + sb3 + "😶\n");
                 sb2.append("|       |\n");
-                sb2.append("|       O\n");
+                sb2.append("|     😶\n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -162,7 +166,7 @@ public class Game {
             case 3:
                 sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🤔\n");
                 sb2.append("|       |\n");
-                sb2.append("|       O\n");
+                sb2.append("|     😮\n");
                 sb2.append("|       |\n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -172,7 +176,7 @@ public class Game {
             case 4:
                 sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🤐\n");
                 sb2.append("|       |\n");
-                sb2.append("|       O\n");
+                sb2.append("|     😖\n");
                 sb2.append("|      /|\n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -182,7 +186,7 @@ public class Game {
             case 5:
                 sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🫣\n");
                 sb2.append("|       |\n");
-                sb2.append("|       O\n");
+                sb2.append("|     🫣\n");
                 sb2.append("|      /|\\\n");
                 sb2.append("|      \n");
                 sb2.append("|      \n");
@@ -190,9 +194,9 @@ public class Game {
                 sb2.append("\n");
                 break;
             case 6:
-                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🥵\n");
+                sb2.append("  +-----+          Incorrect guesses: " + sb3 + "🤯\n");
                 sb2.append("|       |\n");
-                sb2.append("|       O\n");
+                sb2.append("|     🥵\n");
                 sb2.append("|      /|\\\n");
                 sb2.append("|      /\n");
                 sb2.append("|      \n");
@@ -226,5 +230,23 @@ public class Game {
         }
         sb3.trimToSize();
         return sb3;
+    }
+
+    public String picture() {
+        if (won) {
+            return "https://media.tenor.com/zz_QdWPFi9EAAAAC/spongebob-squarepants-patrick-star.gif";
+        }
+        else {
+            return "https://ih1.redbubble.net/image.2189522942.8246/poster,840x830,f8f8f8-pad,1000x1000,f8f8f8.jpg";
+        }
+    }
+
+    public String pictureDescr() {
+        if (won) {
+            return "What a game! Patrick can't hide his teeth 😂";
+        }
+        else {
+            return "Aww, look at his face 🥹";
+        }
     }
 }
