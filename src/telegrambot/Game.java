@@ -37,17 +37,19 @@ public class Game {
     }
 
     public String playGame(String answer) {
+        Character letter = answer.toUpperCase().charAt(0);
         String regex = "^[a-zA-Z]$";
 
         if (answer.matches(regex)) {
-            correctLetters(answer);
+            if (userGuesses.contains(letter)) {
+                return "You've already guessed that letter. Please try a different one 😇";
         }
-        else {
-            return "🤯 Oh sorry, that didn't work - please type in a <b>letter</b> 😇";
-        }
-        state();
 
+        correctLetters(answer);
+        state();
         return printField();
+        }
+        return "🤯 Oh sorry, that didn't work - please type in a <b>letter</b> 😇";
     }
 
     public String chooseRandomWord() {
@@ -243,7 +245,7 @@ public class Game {
 
     public String pictureDescr() {
         if (won) {
-            return "What a game! Patrick can't hide his teeth 😂";
+            return "What a game! Patrick can't stop smiling 😂";
         }
         else {
             return "Aww, look at his face 🥹";

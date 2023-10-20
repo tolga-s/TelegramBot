@@ -50,7 +50,7 @@ public class Menu {
                     
                     🎢 While I had many ups and downs, the process was a great experience.
                     
-                    🥳 Join me on this small adventure!
+                    🥳 For my github profile click on https://github.com/tolga000
                     """;
             return info;
         }
