@@ -109,6 +109,7 @@ public class Game {
             String won = "<b>Very well done, " + userName + "! 🥳\n\n" +
                     "You should play another game 🎉 Click /playagain</b>";
             this.won = true;
+            picture();
             return won;
         }
         else {
@@ -116,6 +117,7 @@ public class Game {
                     " The word was " + secretWord.toUpperCase() + ".\n\n" +
                     "Don't worry, better luck awaits next time! \uD83C\uDF40\n\n" +
                     "Ready for another round? 🎯 Just klick on /playagain</b>";
+            this.won = false;
             picture();
             return lost;
         }
